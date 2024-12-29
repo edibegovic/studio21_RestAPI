@@ -1,4 +1,4 @@
-# Stduio21 REST API
+# Studio21 REST API
 Access Now Playing information of Studio21 at `/current_song` endpoint
 
 # Systemd service
