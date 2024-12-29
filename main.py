@@ -4,8 +4,10 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 import websockets
 from uvicorn import Config, Server
+import time
+from datetime import datetime
 
-current_song_state = {"stationId": "00001", "title": None}  # Static
+current_song_state = {"stationId": "00001", "timestamp": None, "title": None}  # Static
 
 state_lock = asyncio.Lock()
 app = FastAPI()
@@ -41,6 +43,11 @@ async def websocket_listener(uri):
                         if title and artist:
                             async with state_lock:
                                 current_song_state["title"] = f"{artist} - {title}"
+                                current_song_state["timestamp"] = (
+                                    datetime.fromtimestamp(time.time()).strftime(
+                                        "%d-%m-%Y %H:%M"
+                                    )
+                                )
                                 log_to_file(current_song_state)
             except Exception as e:
                 print(f"WebSocket error: {e}")
@@ -69,3 +76,8 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+
+import pipreqs
+
+pipreqs
